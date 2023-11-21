@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-import boto3
+import boto3  # type: ignore
 
 from whiplash.dynamo_util import clean_item
 

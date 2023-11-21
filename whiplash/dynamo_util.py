@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from boto3.dynamodb.types import Binary
+from boto3.dynamodb.types import Binary  # type: ignore
 
 
 def _clean_item(obj):

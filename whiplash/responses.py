@@ -37,7 +37,9 @@ def empty_response(status_code=HTTPStatus.OK.value):
     return resp
 
 
-def response(body: Union[object, List[object]], status_code=HTTPStatus.OK.value):
+def response(
+    body: Union[object, List[object]], status_code=HTTPStatus.OK.value
+) -> dict:
     resp = {
         "headers": cors_headers,
         "statusCode": status_code,

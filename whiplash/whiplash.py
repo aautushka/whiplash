@@ -2,7 +2,7 @@ import logging
 import time
 from typing import Optional
 
-from botocore.exceptions import ClientError
+from botocore.exceptions import ClientError  # type: ignore
 
 from whiplash.collection import Collection
 from whiplash.collection_config import CollectionConfig

@@ -4,8 +4,8 @@ import requests
 
 MODEL_ID = "sentence-transformers/all-MiniLM-L6-v2"
 API_URL = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{MODEL_ID}"
-API_KEY = None
-headers = {"Authorization": "Bearer " + API_KEY, "Content-Type": "application/json"}
+API_KEY = ""
+headers = {"Authorization": "Bearer " + "", "Content-Type": "application/json"}
 
 
 def embed(texts: list[str]):

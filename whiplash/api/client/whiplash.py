@@ -50,7 +50,7 @@ class Whiplash:
             "POST",
             f"projects/{self.project_name}/collections",
             {
-                "name": collection_name,
+                "collection_name": collection_name,
                 "n_features": n_features,
                 "n_planes": n_planes,
                 "bit_start": bit_start,

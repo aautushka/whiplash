@@ -20,7 +20,7 @@ def _get_collection(event) -> Optional[Collection]:
     return whiplash.get_collection(collection_id)
 
 
-def get(event, context):
+def get(event, context) -> dict:
     # Get item
     collection = _get_collection(event)
     if not collection:
@@ -38,7 +38,7 @@ def get(event, context):
     return response(item.to_dict())
 
 
-def search(event, context):
+def search(event, context) -> dict:
     # Search collection
     collection = _get_collection(event)
 
@@ -68,7 +68,7 @@ def search(event, context):
     return response([result.to_dict() for result in results])
 
 
-def create(event, context):
+def create(event, context) -> dict:
     # Create item from POST body
     collection = _get_collection(event)
 
@@ -89,7 +89,7 @@ def create(event, context):
     return response({"message": "success"})
 
 
-def create_batch(event, context):
+def create_batch(event, context) -> dict:
     # Create items from POST body
     collection = _get_collection(event)
 
@@ -109,6 +109,7 @@ def create_batch(event, context):
         if not vector_id:
             return error_response("'id' required")
         vec = vector.get("vector", None)
+
         if not vec or len(vec) != collection.config.n_features:
             return error_response(
                 "'vector' required and must match 'n_features' in size"
