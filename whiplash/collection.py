@@ -24,7 +24,7 @@ class Collection:
         config: CollectionConfig,
     ):
         self.collection_id = config.id
-        storage = DynamoStorage()
+        storage = DynamoStorage(config.region)
         self.vector_table = storage.get_table(f"{self.collection_id}_vectors")
         self.bucket_table = storage.get_table(f"{self.collection_id}_buckets")
         self.config = config

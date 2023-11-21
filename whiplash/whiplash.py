@@ -34,7 +34,7 @@ class Whiplash:
         self.region = region
         self.stage = stage
         self.project_name = project_name
-        self.storage = DynamoStorage()
+        self.storage = DynamoStorage(region_name=region)
         self.metadata_table = self.storage.get_table("whiplash_metadata")
 
     def __repr__(self) -> str:
