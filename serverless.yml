@@ -5,11 +5,11 @@ useDotenv: true
 provider:
   name: aws
   profile: ${env:AWS_PROFILE}
-  region: ${opt:region, "us-east-2"}
+  region: ${opt:region, "eu-west-1"}
   stage: ${opt:stage, "dev"}
   runtime: python3.11
   architecture: arm64
-  memorySize: 256
+  memorySize: 2048
   timeout: 10
   iam:
     role:
@@ -17,7 +17,7 @@ provider:
         - Effect: "Allow"
           Action:
             - "dynamodb:*"
-          Resource: "*"
+          Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/whiplash_*"
   environment:
     # Base Config
     REGION: ${self:provider.region}
