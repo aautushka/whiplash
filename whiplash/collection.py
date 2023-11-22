@@ -105,6 +105,10 @@ class Collection:
                 ExpressionAttributeValues={":val": ids},
             )
 
+    def insert_metadata(self, metadata: dict[str, dict]) -> None:
+        items = [{**v, "id": f"meta#{k}"} for k, v in metadata.items()]
+        self.vector_table.put_batch(items)
+
     def search(self, query: np.ndarray, k: int = 5) -> list[CompVector]:
         """Search for the k closest vectors to the query vector"""
         if not self.config.uniform_planes:
@@ -138,3 +142,18 @@ class Collection:
         ]
         candidates.sort(key=lambda x: x.dist, reverse=True)
         return candidates
+
+    def search_with_metadata(self, query: np.ndarray, k: int = 5) -> list[dict]:
+        found = self.search(query, k)
+        ids = [f"meta#{x.id}" for x in found]
+
+        metadata = self.vector_table.get_bulk(ids)
+
+        joined = {
+            x.id: {k: v for k, v in x.to_dict().items() if k != "vector"} for x in found
+        }
+        for meta in metadata:
+            vector_id = meta["id"][len("meta#") :]
+            joined[vector_id]["metadata"] = meta["metadata"]
+
+        return [x for x in joined.values() if "metadata" in x]
