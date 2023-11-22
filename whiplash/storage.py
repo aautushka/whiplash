@@ -60,12 +60,17 @@ class DynamoTable:
         """
         return self.dynamodb.meta.client.describe_table(TableName=self.table_name)
 
-    def put(self, item):
+    def put(self, item) -> None:
         """
         Store an item in the DynamoDB table.
         :param item: Dictionary representing the item to be stored.
         """
         self.table.put_item(Item=item)
+
+    def put_batch(self, items: list) -> None:
+        with self.table.batch_writer() as batch:
+            for item in items:
+                batch.put_item(Item=item)
 
     def update_column(self, item_id, column_name, new_val):
         """

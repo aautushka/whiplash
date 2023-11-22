@@ -21,18 +21,26 @@ os.environ["AWS_REGION"] = region
 whiplash = Whiplash(region, "dev")
 
 # First time only setup
-# whiplash.setup()
+try:
+    whiplash.setup()
+except:
+    # metadata table already exists
+    pass
 
 n_features = 1536
-collection = whiplash.get_collection(f"test_collection-{n_features}")
+
+try:
+    collection = whiplash.get_collection(f"example-{n_features}")
+except:
+    collection = None
 
 if not collection:
     collection = whiplash.create_collection(
-        f"test_collection-{n_features}",
+        f"example-{n_features}",
         n_features=n_features,
-        n_planes=2,
-        bit_start=10,
-        bit_scale_factor=4,
+        n_planes=1,
+        bit_start=20,
+        bit_scale_factor=2,
     )
 
 assert collection

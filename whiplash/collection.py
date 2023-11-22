@@ -1,5 +1,7 @@
 import logging
 import os
+from collections import defaultdict
+from typing import Optional
 
 import numpy as np
 from xxhash import xxh64
@@ -74,6 +76,34 @@ class Collection:
         for plane_id in self.config.uniform_planes.keys():
             bucket_key = self.hash_key(vector.vector, plane_id)
             self.bucket_table.update_column(bucket_key, "ids", vector.id)
+
+    def insert_batch(
+        self, vectors: list[Vector], metadata=Optional[list[dict]]
+    ) -> None:
+        if not self.config.uniform_planes:
+            raise ValueError("Uniform planes must be created before inserting")
+
+        print("inserting vectors into the database")
+        self.vector_table.put_batch([x.to_dynamo() for x in vectors])
+
+        buckets = defaultdict(set)
+        for vec in vectors:
+            for plane_id in self.config.uniform_planes.keys():
+                bucket_key = self.hash_key(vec.vector, plane_id)
+                buckets[bucket_key].add(vec.id)
+
+        print(f"number of buckets {len(buckets.keys())}")
+        print(
+            sorted([(len(v), k) for k, v in dict(buckets).items()], reverse=True)[:100]
+        )
+
+        for idx, (bucket, ids) in enumerate(dict(buckets).items()):
+            print(f"update bucket {idx} / {len(buckets.keys())}")
+            self.bucket_table.table.update_item(
+                Key={"id": bucket},
+                UpdateExpression=f"ADD ids :val",
+                ExpressionAttributeValues={":val": ids},
+            )
 
     def search(self, query: np.ndarray, k: int = 5) -> list[CompVector]:
         """Search for the k closest vectors to the query vector"""
