@@ -14,7 +14,7 @@ def random_vector():
     return vector
 
 
-region = os.environ.get("AWS_REGION") or "eu-west-1"
+region = os.environ.get("AWS_REGION") or "eu-central-1"
 os.environ["AWS_REGION"] = region
 
 # AWS_PROFILE must be set in environment variables for boto3

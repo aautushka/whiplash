@@ -5,7 +5,7 @@ useDotenv: true
 provider:
   name: aws
   profile: ${env:AWS_PROFILE}
-  region: ${opt:region, "eu-west-1"}
+  region: ${opt:region, "eu-central-1"}
   stage: ${opt:stage, "dev"}
   runtime: python3.11
   architecture: arm64
