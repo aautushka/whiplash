@@ -54,7 +54,7 @@ class Collection:
             {"vectors": [vector.to_dict() for vector in vectors]},
         )
 
-    def search(self, query: list[float], limit: int = 5) -> list[CompVector]:
+    def search(self, query: list[float], limit: int = 5) -> list[dict]:
         """Search for the k closest vectors to the query vector"""
         resp = self.api.request(
             "POST",
@@ -62,4 +62,4 @@ class Collection:
             {"query": query, "limit": limit},
         )
 
-        return [CompVector.from_dict(item) for item in resp]
+        return [item for item in resp]

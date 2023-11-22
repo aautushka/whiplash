@@ -64,8 +64,8 @@ def search(event, context) -> dict:
     query = np.array(query, dtype=np.float32)
     limit = int(limit)
 
-    results = collection.search(query, k=limit)
-    return response([result.to_dict() for result in results])
+    results = collection.search_with_metadata(query, k=limit)
+    return response(results)
 
 
 def create(event, context) -> dict:
